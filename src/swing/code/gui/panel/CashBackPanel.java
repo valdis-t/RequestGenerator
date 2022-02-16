@@ -1,15 +1,13 @@
 package swing.code.gui.panel;
 
 import swing.code.form.ComponentSize;
-import swing.code.form.Readable;
+import swing.code.form.MainPanel;
 import swing.code.gui.layout.MainPanelLayoutManager;
 
 import javax.swing.*;
 
-public class CashBackPanel extends JPanel implements Readable {
+public class CashBackPanel extends MainPanel {
     private static CashBackPanel panel;
-
-    private static final String EMPTY = "";
 
     private JTextField nameField;
     private JTextField idField;

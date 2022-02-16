@@ -3,6 +3,7 @@ package swing.code.gui.panel;
 import swing.code.form.MainPanel;
 
 public class MainRequestPanel extends MainPanel {
+    private static MainRequestPanel panel;
     /*
     КЛАСС БУДЕТ СОДЕРЖАТЬ ПОЛЯ:
     ФИО
@@ -15,6 +16,11 @@ public class MainRequestPanel extends MainPanel {
     КОММЕНТАРИЙ
     ССЫЛКА НА ЧАТ
      */
+    public static MainRequestPanel getInstance(){
+        if(panel == null) panel = new MainRequestPanel();
+        return panel;
+    }
+
     @Override
     public String getAllText() {
         return null;

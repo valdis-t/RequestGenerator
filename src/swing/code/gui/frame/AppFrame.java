@@ -1,12 +1,13 @@
 package swing.code.gui.frame;
 
+import swing.code.form.MainPanel;
 import swing.code.gui.layout.SecondaryPanelLayoutManager;
 import swing.code.gui.panel.CashBackPanel;
 import swing.code.gui.panel.OldMainRequestPanel;
+import swing.code.gui.panel.PanelFactory;
 import swing.code.gui.panel.ReferralPanel;
 import swing.code.gui.layout.MainPanelLayoutManager;
 import swing.code.form.ComponentSize;
-import swing.code.form.Readable;
 import swing.code.util.Saver;
 
 import javax.swing.*;
@@ -15,27 +16,17 @@ import java.awt.*;
 public class AppFrame extends JFrame {
     private JPanel bottomPanel;
     private JPanel topPanel;
-    private JPanel lastUsedPanel;
-
-    private JButton copyToBufferButton;
-    private JButton copyToFileButton;
-    private JButton cleanButton;
-
-    private JButton mainPanelButton;
-    private JButton referralPanelButton;
-    private JButton cashBackButton;
-
-    private Readable source;
+    private MainPanel lastUsedPanel;
 
     public AppFrame(){
         initializeMainPanel();
-        initializeTopPanel();
+//        initializeTopPanel();
+        initializeRequestsPanel();
         initializeBottomPanel();
         initializeFrame();
     }
 
     private void initializeMainPanel(){
-        source = OldMainRequestPanel.getInstance();
         lastUsedPanel = OldMainRequestPanel.getInstance();
     }
 
@@ -43,20 +34,20 @@ public class AppFrame extends JFrame {
         bottomPanel = new JPanel(new SecondaryPanelLayoutManager());
         bottomPanel.setBackground(Color.PINK);
 
-        copyToBufferButton = new JButton("В БУФЕР");
+        JButton copyToBufferButton = new JButton("В БУФЕР");
         copyToBufferButton.setSize(ComponentSize.CONTROL_BUTTON_WIDTH,ComponentSize.CONTROL_BUTTON_HEIGHT);
         copyToBufferButton.addActionListener(l -> {
-            Saver.saveToBuffer(source);
+            Saver.saveToBuffer(lastUsedPanel);
         });
-        copyToFileButton = new JButton("В ФАЙЛ");
+        JButton copyToFileButton = new JButton("В ФАЙЛ");
         copyToFileButton.setSize(ComponentSize.CONTROL_BUTTON_WIDTH,ComponentSize.CONTROL_BUTTON_HEIGHT);
         copyToFileButton.addActionListener(l -> {
-            Saver.saveToFile(source);
+            Saver.saveToFile(lastUsedPanel);
         });
-        cleanButton = new JButton("ОЧИСТИТЬ");
+        JButton cleanButton = new JButton("ОЧИСТИТЬ");
         cleanButton.setSize(ComponentSize.CONTROL_BUTTON_WIDTH,ComponentSize.CONTROL_BUTTON_HEIGHT);
         cleanButton.addActionListener(l -> {
-            source.cleanAllFields();
+            lastUsedPanel.cleanAllFields();
         });
 
         bottomPanel.add(copyToBufferButton);
@@ -76,26 +67,34 @@ public class AppFrame extends JFrame {
         this.setVisible(true);
     }
 
+    private void initializeRequestsPanel() {
+        topPanel = new JPanel(new SecondaryPanelLayoutManager());
+        topPanel.setBackground(Color.ORANGE);
+
+        for (MainPanel panel : PanelFactory.getPanels()) {
+            JButton panelButton = new JButton(panel.getClass().getSimpleName());
+            panelButton.addActionListener(l -> setFrame(panel));
+            topPanel.add(panelButton);
+        }
+    }
+
     private void initializeTopPanel(){
         topPanel = new JPanel(new SecondaryPanelLayoutManager());
         topPanel.setBackground(Color.ORANGE);
 
-        mainPanelButton = new JButton("ОСНОВНОЙ");
-        referralPanelButton = new JButton("РЕФЕРАЛЬНЫЙ");
-        cashBackButton = new JButton("КЕШБЕК");
+        JButton mainPanelButton = new JButton("ОСНОВНОЙ");
+        JButton referralPanelButton = new JButton("РЕФЕРАЛЬНЫЙ");
+        JButton cashBackButton = new JButton("КЕШБЕК");
 
         mainPanelButton.addActionListener(l -> {
-            source = OldMainRequestPanel.getInstance();
             setFrame(OldMainRequestPanel.getInstance());
         });
 
         referralPanelButton.addActionListener(l -> {
-            source = ReferralPanel.getInstance();
             setFrame(ReferralPanel.getInstance());
         });
 
         cashBackButton.addActionListener(l -> {
-            source = CashBackPanel.getInstance();
             setFrame(CashBackPanel.getInstance());
         });
 
@@ -104,7 +103,7 @@ public class AppFrame extends JFrame {
         topPanel.add(referralPanelButton);
     }
 
-    private void setFrame(JPanel panel){
+    private void setFrame(MainPanel panel){
         this.remove(bottomPanel);
         this.remove(lastUsedPanel);
         lastUsedPanel = panel;
