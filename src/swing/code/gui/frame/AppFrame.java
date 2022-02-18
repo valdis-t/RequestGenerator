@@ -1,13 +1,16 @@
 package swing.code.gui.frame;
 
+import swing.code.Start;
 import swing.code.form.MainPanel;
-import swing.code.gui.layout.SecondaryPanelLayoutManager;
+import swing.code.gui.layout.ControlPanelLayoutManager;
+import swing.code.gui.layout.MenuPanelLayoutManager;
 import swing.code.gui.panel.CashBackPanel;
 import swing.code.gui.panel.OldMainRequestPanel;
 import swing.code.gui.panel.PanelFactory;
 import swing.code.gui.panel.ReferralPanel;
 import swing.code.gui.layout.MainPanelLayoutManager;
 import swing.code.form.ComponentSize;
+import swing.code.util.Converter;
 import swing.code.util.Saver;
 
 import javax.swing.*;
@@ -31,21 +34,21 @@ public class AppFrame extends JFrame {
     }
 
     private void initializeBottomPanel(){
-        bottomPanel = new JPanel(new SecondaryPanelLayoutManager());
+        bottomPanel = new JPanel(new ControlPanelLayoutManager());
         bottomPanel.setBackground(Color.PINK);
 
         JButton copyToBufferButton = new JButton("В БУФЕР");
-        copyToBufferButton.setSize(ComponentSize.CONTROL_BUTTON_WIDTH,ComponentSize.CONTROL_BUTTON_HEIGHT);
+        copyToBufferButton.setPreferredSize(new Dimension(ComponentSize.BUTTON_WIDTH,ComponentSize.BUTTON_HEIGHT));
         copyToBufferButton.addActionListener(l -> {
             Saver.saveToBuffer(lastUsedPanel);
         });
         JButton copyToFileButton = new JButton("В ФАЙЛ");
-        copyToFileButton.setSize(ComponentSize.CONTROL_BUTTON_WIDTH,ComponentSize.CONTROL_BUTTON_HEIGHT);
+        copyToFileButton.setPreferredSize(new Dimension(ComponentSize.BUTTON_WIDTH,ComponentSize.BUTTON_HEIGHT));
         copyToFileButton.addActionListener(l -> {
             Saver.saveToFile(lastUsedPanel);
         });
         JButton cleanButton = new JButton("ОЧИСТИТЬ");
-        cleanButton.setSize(ComponentSize.CONTROL_BUTTON_WIDTH,ComponentSize.CONTROL_BUTTON_HEIGHT);
+        cleanButton.setPreferredSize(new Dimension(ComponentSize.BUTTON_WIDTH,ComponentSize.BUTTON_HEIGHT));
         cleanButton.addActionListener(l -> {
             lastUsedPanel.cleanAllFields();
         });
@@ -68,18 +71,19 @@ public class AppFrame extends JFrame {
     }
 
     private void initializeRequestsPanel() {
-        topPanel = new JPanel(new SecondaryPanelLayoutManager());
+        topPanel = new JPanel(new MenuPanelLayoutManager());
         topPanel.setBackground(Color.ORANGE);
 
         for (MainPanel panel : PanelFactory.getPanels()) {
-            JButton panelButton = new JButton(panel.getClass().getSimpleName());
+            JButton panelButton = new JButton(Converter.convertToHTML(panel.getPanelName()));
+            panelButton.setPreferredSize(new Dimension(ComponentSize.BUTTON_WIDTH,ComponentSize.BUTTON_HEIGHT));
             panelButton.addActionListener(l -> setFrame(panel));
             topPanel.add(panelButton);
         }
     }
 
     private void initializeTopPanel(){
-        topPanel = new JPanel(new SecondaryPanelLayoutManager());
+        topPanel = new JPanel(new ControlPanelLayoutManager());
         topPanel.setBackground(Color.ORANGE);
 
         JButton mainPanelButton = new JButton("ОСНОВНОЙ");
@@ -97,6 +101,7 @@ public class AppFrame extends JFrame {
         cashBackButton.addActionListener(l -> {
             setFrame(CashBackPanel.getInstance());
         });
+
 
         topPanel.add(mainPanelButton);
         topPanel.add(cashBackButton);

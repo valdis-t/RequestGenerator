@@ -25,7 +25,6 @@ public class PanelFactory {
         panels.add(EnquiryPanel.getInstance());
         panels.add(DeliveryPanel.getInstance());
         panels.add(OtherRequestPanel.getInstance());
-        panels.add(MainRequestPanel.getInstance());
     }
 
 

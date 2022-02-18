@@ -4,7 +4,7 @@ import swing.code.form.ComponentSize;
 
 import java.awt.*;
 
-public class SecondaryPanelLayoutManager extends FlowLayout {
+public class ControlPanelLayoutManager extends FlowLayout {
     @Override
     public Dimension preferredLayoutSize(Container target) {
         return getSize();
@@ -16,6 +16,6 @@ public class SecondaryPanelLayoutManager extends FlowLayout {
     }
 
     private Dimension getSize(){
-        return new Dimension(ComponentSize.PANEL_WIDTH,ComponentSize.SECONDARY_PANEL_HEIGHT);
+        return new Dimension(ComponentSize.PANEL_WIDTH,ComponentSize.CONTROL_PANEL_HEIGHT);
     }
 }
