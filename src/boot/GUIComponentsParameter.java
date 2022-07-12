@@ -1,18 +1,11 @@
 package boot;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public final class GUIComponentsParameter {
-    private GUIComponentsParameter() {}
-    private final static int BORDER = 900;
-    private final static int WIDTH_FULL_HD = 382;
-    private final static int WIDTH_HD = 300;
-    private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String fontName = "Default";
-    private static final String os = System.getProperty("os.name");
-    private static final String linux = "Linux";
-
     public final static Color contentPanelBackgroundColor = new Color(255, 247, 244);
     public final static Color frameBackgroundColor = new Color(255, 239, 221);
     public final static Color buttonColor = new Color(255, 192, 138);
@@ -21,6 +14,46 @@ public final class GUIComponentsParameter {
     public final static int PERCENTAGE_FRAME_X = 400;
     public final static int RAW_PERCENTAGE_FRAME_X = 600;
     public final static int LOGGER_FRAME_X = 800;
+    public final static int GLOBAL_INDENT_X = 5;
+    public final static int GLOBAL_INDENT_Y = 5;
+    private final static int BORDER = 900;
+    private final static int WIDTH_FULL_HD = 382;
+    private final static int WIDTH_HD = 300;
+    private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private static final String fontName = "Default";
+    private static final String os = System.getProperty("os.name");
+    private static final String linux = "Linux";
+    private final static int SCRIPT_GENERATOR_BUTTONS_IN_LINE = 2;
+    private static Image icoImage = null;
+    private GUIComponentsParameter() {
+    }
+
+    public static Dimension getScriptPanelDimension(int countOfButtons) {
+        if (countOfButtons == 0) {
+            return null;
+        }
+        int lines = countOfButtons % SCRIPT_GENERATOR_BUTTONS_IN_LINE == 0 ? countOfButtons / SCRIPT_GENERATOR_BUTTONS_IN_LINE : countOfButtons / SCRIPT_GENERATOR_BUTTONS_IN_LINE + 1;
+        int width = GLOBAL_INDENT_X * (SCRIPT_GENERATOR_BUTTONS_IN_LINE + 1) + getScriptButtonDimension().width * SCRIPT_GENERATOR_BUTTONS_IN_LINE;
+        int height = GLOBAL_INDENT_Y * (lines + 1) + getScriptButtonDimension().height * lines;
+        return new Dimension(width, height);
+    }
+
+    public static Image getIcoImage(){
+        if(icoImage == null){
+            try{
+                icoImage = ImageIO.read(GUIComponentsParameter.class.getResource("/resources/ico.jpg"));
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        return icoImage;
+    }
+
+    public static Dimension getTextFieldDimension() {
+        int height = 19;
+        int width = getRequestPanelDimension().width - 10;
+        return new Dimension(width, height);
+    }
 
     public static Font getControlPanelFont() {
         if (screenSize.height > BORDER) {
@@ -42,15 +75,15 @@ public final class GUIComponentsParameter {
 
     public static Dimension getDaemonPanelDimension() {
         if (screenSize.height > BORDER) {
-            return new Dimension(120, 128);
-        } else return new Dimension(105, 105);
+            return new Dimension(120, 202);
+        } else return new Dimension(105, 165);
     }
 
     public static Dimension getRequestPanelDimension() {
-        if(os.equals(linux)){
+        if (os.equals(linux)) {
             if (screenSize.height > BORDER) {
-                return new Dimension(WIDTH_FULL_HD+5, 550);
-            } else return new Dimension(WIDTH_HD+20, 452);
+                return new Dimension(WIDTH_FULL_HD + 5, 550);
+            } else return new Dimension(WIDTH_HD + 20, 452);
         } else {
             if (screenSize.height > BORDER) {
                 return new Dimension(WIDTH_FULL_HD, 580);
@@ -59,13 +92,13 @@ public final class GUIComponentsParameter {
     }
 
     public static Dimension getPercentageGeneratorPanelDimension() {
-        if(os.equals(linux)){
+        if (os.equals(linux)) {
             if (screenSize.height > BORDER) {
-                return new Dimension(WIDTH_FULL_HD+5, 540);
-            } else return new Dimension(WIDTH_HD+20, 485);
+                return new Dimension(WIDTH_FULL_HD + 5, 640);
+            } else return new Dimension(WIDTH_HD + 20, 485);
         } else {
             if (screenSize.height > BORDER) {
-                return new Dimension(WIDTH_FULL_HD, 565);
+                return new Dimension(WIDTH_FULL_HD, 795);
             } else return new Dimension(WIDTH_HD, 485);
         }
     }
@@ -75,7 +108,7 @@ public final class GUIComponentsParameter {
         textArea.setFont(getControlPanelFont());
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        if(os.equals(linux)){
+        if (os.equals(linux)) {
             if (screenSize.height > BORDER) {
                 textArea.setColumns(34);
                 textArea.setRows(19);
@@ -120,9 +153,9 @@ public final class GUIComponentsParameter {
     }
 
     public static Dimension getRawResultPanelDimension() {
-        if(os.equals(linux)){
+        if (os.equals(linux)) {
             if (screenSize.height > BORDER) {
-                return new Dimension(WIDTH_FULL_HD+5, 305);
+                return new Dimension(WIDTH_FULL_HD + 5, 305);
             } else return new Dimension(WIDTH_HD, 210);
         } else {
             if (screenSize.height > BORDER) {
@@ -143,6 +176,12 @@ public final class GUIComponentsParameter {
         } else return new Dimension(170, 15);
     }
 
+    public static Dimension getScriptButtonDimension() {
+        if (screenSize.height > BORDER) {
+            return new Dimension(200, 30);
+        } else return new Dimension(190, 25);
+    }
+
     public static Dimension getControlButtonDimension() {
         if (screenSize.height > BORDER) {
             return new Dimension(110, 30);
@@ -156,7 +195,7 @@ public final class GUIComponentsParameter {
     }
 
     public static int getTextAreaColumns() {
-        if(os.equals(linux)){
+        if (os.equals(linux)) {
             if (screenSize.height > BORDER) {
                 return 34;
             } else return 34;
